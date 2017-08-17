@@ -52,7 +52,7 @@ class NewsPostController extends Controller
                 return Carbon::parse($post->published_at)->diffForHumans();
             })
             ->editColumn('status',function ($post){
-                if($post->status ==1){
+                if($post->status == 1){
                     return "<label class='label label-success'>Hoạt động</label>";
                 }else{
                     return "<label class='label label-warning'>Ẩn</label>";
@@ -80,14 +80,6 @@ class NewsPostController extends Controller
     public function store(PostAddRequest $request)
     {
         try {
-            $tag = $request->tags;
-            $tag = explode(',', $tag);
-            foreach ($tag as $val){
-                $check = NewsTag::firstOrNew(['name' => $val]);
-                if($check){
-
-                }
-            }
             $data = $request->only(['title', 'summary', 'data', 'post_type', 'post_status']);
             $data['published_at'] = Carbon::parse($request->published_at)->toDateTimeString();
             if($request->hasFile('thumbnail')){
@@ -107,8 +99,6 @@ class NewsPostController extends Controller
                 $check->save();
                 $post->tags()->attach($check->id);
             }
-
-
 
             // Update post category
             if (isset($request->category) && !empty($request->category)) {
