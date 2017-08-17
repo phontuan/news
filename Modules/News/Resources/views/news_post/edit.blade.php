@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Danh mục tin</label>
-                                    <div class="list-categories" style="height: 135px; overflow-y: scroll">
+                                    <div class="list-categories" style="height: 120px; overflow-y: scroll">
                                         @if (isset($categories) && !empty($categories))
                                             <?php $postCategories = $post->categories()->pluck('category_id')->toArray(); ?>
                                             @foreach($categories as $category)
@@ -104,7 +104,7 @@
         <!-- Modal -->
         <div id="addCat" class="modal fade" role="dialog">
             <div class="modal-dialog">
-
+                <div id="alert-cat-add"></div>
                 <!-- Modal content-->
                 <form class="form-horizontal" id="form-add-cat">
                     <div class="modal-content">
@@ -159,6 +159,10 @@
     <script src="{{ asset('admin-lte/plugins/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('admin-lte/plugins/iCheck/icheck.min.js') }}"></script>
     <script>
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_flat'
+        });
         tinymce.init({
             selector: '#post-data',
             height: 500,
@@ -206,6 +210,13 @@
                         $('.list-categories').append('<div class="checkbox">'+
                             '<label> <input type="checkbox" name="category[]" value="'+data.id+'"/>'+data.name +'</label></div>');
                         $('#addCat').modal('hide');
+                    },
+                    error: function (data) {
+                        if(data.responseText.name != ''){
+                            $('#alert-cat-add').append('<div class="alert alert-danger" >Vui lòng nhập vào tên</div>')
+                        }else {
+                            $('#alert-cat-add').append('<div class="alert alert-danger" >Có lỗi xảy ra vui lòng thử lại</div>')
+                        }
                     }
                 })
                 return false;

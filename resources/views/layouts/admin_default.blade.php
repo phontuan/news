@@ -25,9 +25,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           apply the skin class to the body tag so the changes take effect. -->
     <link rel="stylesheet" href="{{ asset('admin-lte/dist/css/skins/skin-yellow.min.css') }}">
 
-<!--
-    <link rel="stylesheet" href="{{ asset('admin-lte/plugins/datatables/dataTables.bootstrap.min.css') }}">
--->
+
+    <link rel="stylesheet" href="{{ asset('admin-lte/plugins/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin-lte/plugins/iCheck/all.css') }}">
+
     <link rel="stylesheet" href="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 
     <link rel="stylesheet" href="{{ asset('admin-lte/dist/css/custom.css') }}">
@@ -74,7 +75,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 -->
-
+<!--Icheck-->
+<script src="{{ asset('admin-lte/plugins/iCheck/icheck.min.js') }}"></script>
 <!-- Select 2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
