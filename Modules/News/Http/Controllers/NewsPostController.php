@@ -51,12 +51,26 @@ class NewsPostController extends Controller
                 Carbon::setLocale('vi');
                 return Carbon::parse($post->published_at)->diffForHumans();
             })
-            ->editColumn('status',function ($post){
-                if($post->status == 1){
+            ->editColumn('post_status',function ($post){
+                if($post->post_status == 1){
                     return "<label class='label label-success'>Hoạt động</label>";
                 }else{
-                    return "<label class='label label-warning'>Ẩn</label>";
+                    return "<label class='label label-warning'>Nháp</label>";
                 }
+            })
+            ->addColumn('category',function ($post){
+                $data = '';
+                foreach ($post->categories as $val){
+                    $data .= "<label class='label label-default'>".$val->category->name."</label>".' ';
+                }
+                return $data;
+            })
+            ->addColumn('tag',function ($post){
+                $data = '';
+                foreach ($post->tags as $val){
+                    $data .= "<label class='label label-info'>".$val->name."</label>".' ';
+                }
+                return $data;
             })
             ->addColumn('actions',function ($post){
                 $html   = view('news::includes.post.colum',['module' => 'actions', 'column' => 'actions','post'=>$post])->render();

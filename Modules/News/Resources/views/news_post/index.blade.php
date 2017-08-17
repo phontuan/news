@@ -29,7 +29,8 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Tiêu đề</th>
-                                    <th>Mô tả</th>
+                                    <th>Danh mục</th>
+                                    <th>Tag</th>
                                     <th>Trạng thái</th>
                                     <th>Thời gian phát hành</th>
                                     <th class="actions">Actions</th>
@@ -66,8 +67,9 @@
                 columns: [
                     {data: 'id', sortable: false},
                     {data: 'title', sortable: false},
-                    {data: 'summary', sortable: false},
-                    {data: 'status', sortable: false},
+                    {data: 'category', sortable: false},
+                    {data: 'tag', sortable: false},
+                    {data: 'post_status', sortable: false},
                     {data: 'published_at', sortable: false},
                     {data: 'actions', orderable: false}
                 ],
