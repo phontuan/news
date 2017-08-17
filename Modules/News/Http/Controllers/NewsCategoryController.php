@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Modules\News\Http\Requests\CatAddRequest;
+use Modules\News\Http\Requests\CatEditRequest;
 use Modules\News\Models\NewsCategory;
 use Modules\News\Repositories\Categoryes\CategoryRepository;
 use Yajra\Datatables\Datatables;
@@ -30,7 +32,7 @@ class NewsCategoryController extends Controller
      */
     public function index()
     {
-        $categories = NewsCategory::where('status', '>', NewsCategory::STATUS_DELETED)->paginate(15);
+        //$categories = NewsCategory::where('status', '>', NewsCategory::STATUS_DELETED)->paginate(15);
 
         return view('news::news_category.index', compact('categories'));
     }
@@ -41,8 +43,13 @@ class NewsCategoryController extends Controller
      */
     public function create()
     {
-        $categories = NewsCategory::getNestedList(true);
-        return view('news::news_category.create', compact('categories'));
+        if(request()->get('action')=='get'){
+            $categories = NewsCategory::getNestedList(true);
+            return $categories;
+        }else{
+            $categories = NewsCategory::getNestedList(true);
+            return view('news::news_category.create', compact('categories'));
+        }
     }
 
     /**
@@ -50,14 +57,17 @@ class NewsCategoryController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(CatAddRequest $request)
     {
         try {
             $data = $request->only(['parent_id', 'name', 'position', 'cover', 'summary']);
 
-            NewsCategory::create($data);
-
-            return redirect(route('news.news_category.index'));
+            $add = NewsCategory::create($data);
+            if($request->ajax()){
+                return $add;
+            }else{
+                return redirect(route('news.news_category.index'));
+            }
         } catch (\Exception $ex) {
             Log::error('[NewsCategory] ' . $ex->getMessage());
 
@@ -73,6 +83,14 @@ class NewsCategoryController extends Controller
     {
         return Datatables::of($this->category->getForDataTable())
             ->escapeColumns([])
+            ->editColumn('name',function ($category){
+                $data = $category->getNestedList();
+                foreach ($data as $val){
+                    if($val->id == $category->id){
+                        return $val->prefix.$val->name;
+                    }
+                }
+            })
             ->editColumn('parent_id',function ($category){
                 if($category->parent_id ==0){
                     return "<label class='label label-info'>Cha</label>";
@@ -83,10 +101,8 @@ class NewsCategoryController extends Controller
             ->editColumn('status',function ($category){
                 if($category->status ==1){
                     return "<label class='label label-success'>Hoạt động</label>";
-                }elseif($category->status ==0){
-                    return "<label class='label label-warning'>Ẩn</label>";
                 }else{
-                    return "<label class='label label-danger'>Xóa</label>";
+                    return "<label class='label label-warning'>Ẩn</label>";
                 }
             })
             ->addColumn('actions',function ($category){
@@ -109,7 +125,7 @@ class NewsCategoryController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(CatEditRequest $request, $id)
     {
         try {
             $data = $request->only(['parent_id', 'name', 'position', 'cover', 'summary']);
