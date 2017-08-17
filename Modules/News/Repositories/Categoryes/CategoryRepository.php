@@ -15,7 +15,7 @@ class CategoryRepository extends BaseRepository
     }
     public function getForDataTable()
     {
-        return $this->query();
+        return $this->query()->where('status','>=',0);
     }
     public function create($input)
     {

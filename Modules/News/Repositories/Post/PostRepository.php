@@ -14,7 +14,7 @@ class PostRepository extends BaseRepository
     }
     public function getForDataTable($param=null)
     {
-        return $this->query();
+        return $this->query()->where('status','>=',0);
 
     }
     public function create($input)
