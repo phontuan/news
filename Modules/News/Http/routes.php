@@ -6,9 +6,11 @@ Route::group(['middleware' => 'web', 'prefix' => 'news', 'namespace' => 'Modules
 
     Route::resource('/news_category', 'NewsCategoryController', ['as' => 'news']);
     Route::get('/news_category/get','NewsCategoryController@get')->name('news.news_category.get');
+    Route::get('news_category/delete/{id}','NewsCategoryController@destroy')->name('news.news_category.delete');
 
     Route::resource('/news_post', 'NewsPostController', ['as' => 'news']);
     Route::get('/news_post/get','NewsPostController@get')->name('news.news_post.get');
+    Route::get('news_post/delete/{id}','NewsPostController@destroy')->name('news.news_post.delete');
 });
 
 /* API route */

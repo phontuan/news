@@ -13,17 +13,13 @@
     </section>
     <section class="content">
         <div class="box box-primary">
-            <form class="form-add-insurance-company" method="post" action="{{ route('news.news_post.index') }}" enctype="multipart/form-data">
+            <form id="form-add-post" class="form-add-insurance-company" method="post" action="{{ route('news.news_post.index') }}" enctype="multipart/form-data">
                 <div class="box-header with-border">
                     <h3 class="box-title">Thêm bài viết</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if ($errors->any())
-                        @foreach($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                    @endif
+                    @include('news::includes.message')
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
@@ -62,6 +58,11 @@
                                         @endforeach
                                     @endif
                                 </div>
+                                <button id="load-cat-parent" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addCat">Thêm danh mục</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Tags</label><br>
+                                <input type="text" value="" name="tags" data-role="tagsinput" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Trạng thái</label>
@@ -97,6 +98,58 @@
                 </div>
             </form>
         </div>
+        <!-- Modal -->
+        <div id="addCat" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <form class="form-horizontal" id="form-add-cat">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Thêm danh mục</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Tên danh mục</label>
+                                <div class="col-sm-10">
+                                    <input name="name" type="text" value="{{ old('name') }}" class="form-control" placeholder="Nhập vào tên danh mục">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Danh muc cha</label>
+                                <div class="col-sm-10">
+                                    <select id="parent_cat" name="parent_id" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Ảnh cover</label>
+                                <div class="col-sm-10">
+                                    <input name="cover" value="{{ old('cover') }}" type="text" class="form-control" placeholder="Nhập vào link ảnh cover">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Mô tả</label>
+                                <div class="col-sm-10">
+                                    <textarea name="summary" class="form-control" placeholder="Nhập vào mô tả">{{ old('summary') }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Vị trí</label>
+                                <div class="col-sm-10">
+                                    <input name="position" type="number" value="{{ old('position') }}" class="form-control" placeholder="Nhập vào thứ tự hiển thị">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-success">Thêm mới</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
 @endsection
 @section('scripts')
@@ -126,5 +179,41 @@
                 format :"DD-MM-YYYY HH:mm"
             });
         });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#load-cat-parent').click(function () {
+                $.ajax({
+                    url : '{{route('news.news_category.create')}}?action=get',
+                    type: 'GET',
+                    success: function (data) {
+                        $.each(data, function( index, val ) {
+                            $('#parent_cat').append('<option value="'+val.id+'">'+val.prefix+val.name+'</option>');
+                        });
+                    }
+                });
+            })
+            $('#form-add-cat').submit(function () {
+                var data = $(this).serialize();
+                $.ajax({
+                    url : '{{route('news.news_category.store')}}',
+                    type: 'POST',
+                    data: data,
+                    success : function (data) {
+                        $('.list-categories').append('<div class="checkbox">'+
+                            '<label> <input type="checkbox" name="category[]" value="'+data.id+'"/>'+data.name +'</label></div>');
+                        $('#addCat').modal('hide');
+                    }
+                })
+                return false;
+            });
+            $('#form-add-post').bind("keypress", function(e) {
+                if (e.keyCode == 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+        })
     </script>
 @endsection

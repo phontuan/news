@@ -17,11 +17,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if ($errors->any())
-                        @foreach($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                    @endif
+                    @include('news::includes.message')
                     <div class="row">
                         <div class="col-md-offset-3 col-md-6">
                             <div class="form-group">

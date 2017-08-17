@@ -14,6 +14,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box box-info">
+                    @include('news::includes.message')
                     <div class="box-header">
                         <h3 class="box-title">Danh sách bài viết</h3>
                         <div class="pull-right">
@@ -66,7 +67,7 @@
                     {data: 'id', sortable: false},
                     {data: 'title', sortable: false},
                     {data: 'summary', sortable: false},
-                    {data: 'post_status', sortable: false},
+                    {data: 'status', sortable: false},
                     {data: 'published_at', sortable: false},
                     {data: 'actions', orderable: false}
                 ],

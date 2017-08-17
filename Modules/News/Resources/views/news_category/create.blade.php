@@ -13,17 +13,14 @@
     </section>
     <section class="content">
         <div class="box box-primary">
+
             <form class="form-add-news-category" method="post" action="{{ route('news.news_category.store') }}">
                 <div class="box-header with-border">
                     <h3 class="box-title">Thêm mới danh mục tin</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if ($errors->any())
-                        @foreach($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                    @endif
+                    @include('news::includes.message')
                     <div class="row">
                         <div class="col-md-offset-3 col-md-6">
                             <div class="form-group">

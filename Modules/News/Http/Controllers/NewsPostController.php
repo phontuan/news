@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Modules\News\Http\Requests\PostAddRequest;
+use Modules\News\Http\Requests\PostEditRequest;
 use Modules\News\Models\NewsCategory;
 use Modules\News\Models\NewsCategoryPost;
 use Modules\News\Models\NewsPost;
@@ -13,6 +15,7 @@ use Carbon\Carbon;
 use Yajra\Datatables\Datatables;
 use Modules\News\Repositories\Post\PostRepository;
 use Image;
+use Modules\News\Models\NewsTag;
 
 class NewsPostController extends Controller
 {
@@ -48,13 +51,11 @@ class NewsPostController extends Controller
                 Carbon::setLocale('vi');
                 return Carbon::parse($post->published_at)->diffForHumans();
             })
-            ->editColumn('post_status',function ($post){
-                if($post->post_status ==1){
+            ->editColumn('status',function ($post){
+                if($post->status ==1){
                     return "<label class='label label-success'>Hoạt động</label>";
-                }elseif($post->post_status ==0){
-                    return "<label class='label label-warning'>Ẩn</label>";
                 }else{
-                    return "<label class='label label-danger'>Xóa</label>";
+                    return "<label class='label label-warning'>Ẩn</label>";
                 }
             })
             ->addColumn('actions',function ($post){
@@ -76,18 +77,38 @@ class NewsPostController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(PostAddRequest $request)
     {
         try {
+            $tag = $request->tags;
+            $tag = explode(',', $tag);
+            foreach ($tag as $val){
+                $check = NewsTag::firstOrNew(['name' => $val]);
+                if($check){
+
+                }
+            }
             $data = $request->only(['title', 'summary', 'data', 'post_type', 'post_status']);
             $data['published_at'] = Carbon::parse($request->published_at)->toDateTimeString();
-            $img = $request->file('thumbnail')->getClientOriginalName();
-            $request->thumbnail->move('img/posts',$img);
-            $data['images'] = $img;
-            $thumnail = Image::make('img/posts/'.$img)->resize(300, 200);
-            $thumnail->save('img/posts/thumbnail/thumbnail_'.$img);
-            $data['thumbnail'] = 'thumbnail_'.$img;
+            if($request->hasFile('thumbnail')){
+                $img = $request->file('thumbnail')->getClientOriginalName();
+                $request->thumbnail->move('img/posts',$img);
+                $data['images'] = $img;
+                $thumnail = Image::make('img/posts/'.$img)->resize(300, 200);
+                $thumnail->save('img/posts/thumbnail/thumbnail_'.$img);
+                $data['thumbnail'] = 'thumbnail_'.$img;
+            }
             $post = NewsPost::create($data);
+
+            $tag = $request->tags;
+            $tag = explode(',', $tag);
+            foreach ($tag as $val){
+                $check = NewsTag::firstOrNew(['name' => $val]);
+                $check->save();
+                $post->tags()->attach($check->id);
+            }
+
+
 
             // Update post category
             if (isset($request->category) && !empty($request->category)) {
@@ -112,11 +133,11 @@ class NewsPostController extends Controller
     public function edit($id)
     {
         $post = NewsPost::find($id);
-
+        $tag = $post->tags()->get(['name']);
         // Get nested list categories
         $categories = NewsCategory::getNestedList();
 
-        return view('news::news_post.edit', compact('post', 'categories'));
+        return view('news::news_post.edit', compact('post', 'categories','tag'));
     }
 
     /**
@@ -124,7 +145,7 @@ class NewsPostController extends Controller
      * @param  Request $request
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(PostEditRequest $request, $id)
     {
         try {
             $data = $request->only(['title', 'images', 'summary', 'data', 'post_type']);
@@ -138,6 +159,16 @@ class NewsPostController extends Controller
             }
 
             NewsPost::updateById($id, $data);
+            $post = NewsPost::find($id);
+            $tag = $request->tags;
+            $tag = explode(',', trim($tag));
+            $tag_id = [];
+            foreach ($tag as $val){
+                $check = NewsTag::firstOrNew(['name' => $val]);
+                $check->save();
+                $tag_id[] = $check->id;
+            }
+            $post->tags()->sync($tag_id,false);
 
             // Update post category
             if (isset($request->category)) {
