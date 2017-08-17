@@ -153,6 +153,7 @@ class NewsPostController extends Controller
     {
         try {
             $data = $request->only(['title', 'images', 'summary', 'data', 'post_type']);
+            $data['published_at'] = Carbon::parse($request->published_at)->toDateTimeString();
             if($request->hasFile('thumbnail')){
                 $img = $request->file('thumbnail')->getClientOriginalName();
                 $request->thumbnail->move('img/posts',$img);

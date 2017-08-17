@@ -4,7 +4,6 @@
     <list default="true" id="f8e05524-9c77-4808-acce-da4836a22100" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Modules/News/Http/Controllers/NewsPostController.php" afterPath="$PROJECT_DIR$/Modules/News/Http/Controllers/NewsPostController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Modules/News/Resources/views/news_post/index.blade.php" afterPath="$PROJECT_DIR$/Modules/News/Resources/views/news_post/index.blade.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -31,8 +30,8 @@
       <file leaf-file-name="NewsPost.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Modules/News/Models/NewsPost.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="30" />
+            <state relative-caret-position="129">
+              <caret line="27" column="27" lean-forward="false" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -41,8 +40,8 @@
       <file leaf-file-name="NewsPostController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Modules/News/Http/Controllers/NewsPostController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="63" column="63" lean-forward="false" selection-start-line="63" selection-start-column="56" selection-end-line="63" selection-end-column="63" />
+            <state relative-caret-position="75">
+              <caret line="155" column="85" lean-forward="false" selection-start-line="155" selection-start-column="85" selection-end-line="155" selection-end-column="85" />
               <folding>
                 <element signature="e#49#77#0#PHP" expanded="true" />
               </folding>
@@ -459,7 +458,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38270000" />
+    <option name="totallyTimeSpent" value="38484000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1009,14 +1008,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Modules/News/Models/NewsPost.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa0.299/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1060,10 +1051,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Modules/News/Models/NewsPost.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="27" column="27" lean-forward="false" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Modules/News/Http/Controllers/NewsPostController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="63" column="63" lean-forward="false" selection-start-line="63" selection-start-column="56" selection-end-line="63" selection-end-column="63" />
+        <state relative-caret-position="75">
+          <caret line="155" column="85" lean-forward="false" selection-start-line="155" selection-start-column="85" selection-end-line="155" selection-end-column="85" />
           <folding>
             <element signature="e#49#77#0#PHP" expanded="true" />
           </folding>
