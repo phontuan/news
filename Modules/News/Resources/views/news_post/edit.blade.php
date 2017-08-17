@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Danh mục tin</label>
-                                    <div class="list-categories">
+                                    <div class="list-categories" style="height: 135px; overflow-y: scroll">
                                         @if (isset($categories) && !empty($categories))
                                             <?php $postCategories = $post->categories()->pluck('category_id')->toArray(); ?>
                                             @foreach($categories as $category)
@@ -58,8 +58,9 @@
                                                 </div>
                                             @endforeach
                                         @endif
-                                            <button id="load-cat-parent" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addCat">Thêm danh mục</button>
                                     </div>
+                                    <br>
+                                    <button id="load-cat-parent" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addCat">Thêm danh mục</button>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tags</label><br>
@@ -69,8 +70,8 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Trạng thái</label>
                                     <select name="post_status" class="form-control">
-                                        <option value="0">Draft</option>
-                                        <option value="1">Public</option>
+                                        <option value="0" {{$post->post_status == 0 ?'selected':''}}>Draft</option>
+                                        <option value="1" {{$post->post_status == 1 ?'selected':''}}>Public</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -81,7 +82,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Thời gian publish</label>
                                     <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' class="form-control" name="published_at" value="{{ old('published_at') }}" />
+                                        <input type='text' class="form-control" name="published_at" value="{{ \Carbon\Carbon::parse($post->published_at)->format('d-m-Y H:m') }}" />
                                         <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>

@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Danh mục tin</label>
-                                <div class="list-categories">
+                                <div class="list-categories" style="height: 135px; overflow-y: scroll">
                                     @if (isset($categories) && !empty($categories))
                                         @foreach($categories as $category)
                                             <div class="checkbox">
@@ -58,6 +58,7 @@
                                         @endforeach
                                     @endif
                                 </div>
+                                <br>
                                 <button id="load-cat-parent" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addCat">Thêm danh mục</button>
                             </div>
                             <div class="form-group">
