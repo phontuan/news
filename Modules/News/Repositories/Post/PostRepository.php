@@ -12,9 +12,14 @@ class PostRepository extends BaseRepository
     {
         return $this->query()->orderBy('id','DESC')->get();
     }
-    public function getForDataTable($param=null)
+    public function getForDataTable($filer,$param=null)
     {
-        return $this->query()->where('status','>=',0);
+        $filer[] = ['status','>=',0];
+        if($param == null){
+            return $this->query()->where($filer);
+        }else{
+            return $this->query()->where($filer)->whereDate($param);
+        }
 
     }
     public function create($input)

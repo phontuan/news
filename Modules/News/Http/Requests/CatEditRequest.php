@@ -14,7 +14,8 @@ class CatEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  =>  'required'
+            'name'  =>  'required',
+            'slug'=>  'unique:news_categories,slug'
         ];
     }
 

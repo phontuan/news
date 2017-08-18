@@ -41,13 +41,14 @@ class NewsCategory extends Model
             ->where('status', '>', self::STATUS_DELETED)
             ->where(function($query) {
                 $query->whereNull('parent_id')->orWhere('parent_id', 0);
-            })->orderBy('position')->select(['id', 'name'])->get();
+            })->orderBy('position')->select(['id', 'name','slug','parent_id'])->get();
 
         if ($addFirstDefault) {
             $category = new \stdClass();
             $category->id = 0;
             $category->prefix = '';
             $category->name = 'Danh mục gốc';
+            $category->slug = 'root';
             $category->position = 0;
 
             $tmpData = [$category];

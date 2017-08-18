@@ -61,7 +61,9 @@ class NewsCategoryController extends Controller
     {
         try {
             $data = $request->only(['parent_id', 'name', 'position', 'cover', 'summary']);
-
+            if($request->slug = ''){
+                $data['slug'] = str_slug($request->name);
+            }
             $add = NewsCategory::create($data);
             if($request->ajax()){
                 return $add;
@@ -128,8 +130,10 @@ class NewsCategoryController extends Controller
     public function update(CatEditRequest $request, $id)
     {
         try {
-            $data = $request->only(['parent_id', 'name', 'position', 'cover', 'summary']);
-
+            $data = $request->only(['parent_id', 'name', 'position', 'cover', 'summary','prefix']);
+            if($request->slug = ''){
+                $data['slug'] = str_slug($request->name);
+            }
             NewsCategory::updateById($id, $data);
 
             return redirect(route('news.news_category.index'));

@@ -22,7 +22,11 @@
                         <div class="col-md-offset-3 col-md-6">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tên danh mục</label>
-                                <input name="name" type="text" value="{{ $category->name }}" class="form-control" placeholder="Nhập tên danh mục">
+                                <input name="name" type="text" value="{{ $category->name }}" class="form-control" placeholder="Nhập vào tên danh mục" onchange="changeInput(this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Link</label>
+                                <input name="slug" id="prefix" type="text" value="{{ $category->prefix }}" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Danh mục cha</label>
@@ -60,4 +64,36 @@
             {!! Form::close() !!}
         </div>
     </section>
+@endsection
+@section('scripts')
+    <script>
+        function changeInput(val) {
+            slug = val.toLowerCase();
+
+            //Đổi ký tự có dấu thành không dấu
+            slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+            slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+            slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+            slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+            slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+            slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+            slug = slug.replace(/đ/gi, 'd');
+            console.log(slug)
+            //Xóa các ký tự đặt biệt
+            slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+            //Đổi khoảng trắng thành ký tự gạch ngang
+            slug = slug.replace(/ /gi, "-");
+            //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+            //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+            slug = slug.replace(/\-\-\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-/gi, '-');
+            //Xóa các ký tự gạch ngang ở đầu và cuối
+            slug = '@'+slug+'@';
+            slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+            slug = slug.trim();
+            $('#prefix').val(slug)
+        }
+    </script>
 @endsection

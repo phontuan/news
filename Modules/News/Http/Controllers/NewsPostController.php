@@ -2,9 +2,11 @@
 
 namespace Modules\News\Http\Controllers;
 
+use function GuzzleHttp\Psr7\parse_query;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Modules\News\Http\Requests\PostAddRequest;
 use Modules\News\Http\Requests\PostEditRequest;
@@ -33,19 +35,61 @@ class NewsPostController extends Controller
     }
     public function index()
     {
-//        $newses = NewsPost::with('categories')->with('categories.category')
-//            ->where('status', '>', NewsPost::STATUS_DELETED)
-//            ->paginate(15);
-        return view('news::news_post.index');
+        $categories = NewsCategory::getNestedList(true);
+        $tags = NewsTag::all();
+        return view('news::news_post.index',compact('categories','tags'));
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Response
      */
-    public function show()
+    public function show(Request $request)
     {
-        return Datatables::of($this->post->getForDataTable())
+        $input_all = [];
+        $query = base64_decode($request->get('query'));
+        if ($input_all != "") {
+            $params    = [];
+            if($query != ''){
+                $input = explode('&',$query);
+                foreach( $input as $param )
+                {
+                    list($name, $value) = explode('=', $param, 2);
+                    $params[$name]      = $value;
+                }
+
+            }
+            $input_all = $params;
+        }
+        $name           = trim(Arr::get($input_all,'name'));
+        $post_status    = Arr::get($input_all,'post_status');
+        $published_at   = Arr::get($input_all,'published_at');
+        $category       = Arr::get($input_all,'category');
+        $tag            = Arr::get($input_all,'tag');
+        $filter = [];
+        $filter[] = ['status','>=',0];
+        if($name != ''){
+            $name = '%'.$name.'%';
+            $filter[] = ['title','LIKE',$name];
+        }
+        if($post_status!= ''){
+            $filter[] = ['post_status','=',$post_status];
+        }
+        $data = NewsPost::where($filter);
+        if($published_at != ''){
+            $data = $data->whereDate('published_at','=',$published_at);
+        }
+        if($tag != ''){
+            $data = $data->whereHas('tags',function ($query) use ($tag){
+                $query->where('name',$tag);
+            });
+        }
+        if($category != ''){
+            $data = $data->whereHas('cat',function ($query) use ($category){
+                $query->where('prefix',$category);
+            });
+        }
+        return Datatables::of($data->get())
             ->escapeColumns([])
             ->editColumn('published_at',function ($post){
                 Carbon::setLocale('vi');
@@ -95,6 +139,9 @@ class NewsPostController extends Controller
     {
         try {
             $data = $request->only(['title', 'summary', 'data', 'post_type', 'post_status']);
+            if($request->slug = ''){
+                $data['slug'] = str_slug($request->title);
+            }
             $data['published_at'] = Carbon::parse($request->published_at)->toDateTimeString();
             if($request->hasFile('thumbnail')){
                 $img = $request->file('thumbnail')->getClientOriginalName();
@@ -153,6 +200,9 @@ class NewsPostController extends Controller
     {
         try {
             $data = $request->only(['title', 'images', 'summary', 'data', 'post_type']);
+            if($request->slug = ''){
+                $data['slug'] = str_slug($request->title);
+            }
             $data['published_at'] = Carbon::parse($request->published_at)->toDateTimeString();
             if($request->hasFile('thumbnail')){
                 $img = $request->file('thumbnail')->getClientOriginalName();

@@ -12,6 +12,10 @@ class NewsPost extends Model
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
 
+    public function cat()
+    {
+        return $this->belongsToMany('Modules\News\Models\NewsCategory', 'news_category_posts','post_id','category_id');
+    }
     public function categories()
     {
         return $this->hasMany('Modules\News\Models\NewsCategoryPost', 'post_id');

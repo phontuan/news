@@ -78,8 +78,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!--Icheck-->
 <script src="{{ asset('admin-lte/plugins/iCheck/icheck.min.js') }}"></script>
 <!-- Select 2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="{{ asset('admin-lte/plugins/select2/select2.min.js') }}"></script>
+<link href="{{ asset('admin-lte/plugins/select2/select2.min.css') }}" rel="stylesheet" />
 <!-- AdminLTE App -->
 <script src="https://adminlte.io/themes/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <script src="{{ asset('admin-lte/dist/js/adminlte.min.js') }}"></script>

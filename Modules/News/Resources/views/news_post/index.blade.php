@@ -1,6 +1,14 @@
 @extends('layouts.admin_default')
 @section('title', 'Quản lý tin tức')
 @section('content')
+    <style>
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #d2d6de !important;
+            border-radius: 0 !important;
+            height: 100% !important;
+        }
+    </style>
     <section class="content-header">
         <h1>
             Quản lý bài viết
@@ -12,6 +20,21 @@
     </section>
     <section class="content">
         <div class="row">
+            <div class="col-md-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true"><i class="fa fa-list-alt" aria-hidden="true"></i> Tất cả</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            {!! Form::open(['route' => 'news.news_post.index', 'class' => 'filter', 'role' => 'form', 'method' => 'GET', 'enctype'=>'multipart/form-data']) !!}
+                            @include('news::includes.post.filter')
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
             <div class="col-xs-12">
                 <div class="box box-info">
                     @include('news::includes.message')
@@ -51,6 +74,11 @@
     <script src="{{ asset('admin-lte/plugins/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
         $(function() {
+            if($('.filter').submit == true){
+                var data = $('.filter').serialize();
+            }else {
+                var data = null;
+            }
             $('#post_table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -62,7 +90,9 @@
                 ajax: {
                     url: '{{ route("news.news_post.get") }}',
                     type: 'get',
-                    data: {}
+                    data: {
+                        query: '{{ base64_encode(urldecode(Request::getQueryString())) }}'
+                    }
                 },
                 columns: [
                     {data: 'id', sortable: false},
@@ -90,6 +120,11 @@
                 },
                 order: [[0, "asc"]],
                 searchDelay: 500
+            });
+        });
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format :"DD-MM-YYYY"
             });
         });
     </script>

@@ -16,7 +16,8 @@ class PostAddRequest extends FormRequest
         return [
             'title'     =>  'required',
             'data'      =>  'required',
-            'category'  =>  'required'
+            'category'  =>  'required',
+            'slug'      =>  'unique:news_posts,slug'
         ];
     }
 
