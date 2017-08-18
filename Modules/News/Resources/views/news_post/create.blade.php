@@ -123,7 +123,13 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="email">Tên danh mục</label>
                                 <div class="col-sm-10">
-                                    <input name="name" type="text" value="{{ old('name') }}" class="form-control" placeholder="Nhập vào tên danh mục">
+                                    <input name="name" type="text" value="{{ old('name') }}" class="form-control" placeholder="Nhập vào tên danh mục" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Slug</label>
+                                <div class="col-sm-10">
+                                    <input name="slug" id="prefix" type="text" value="{{ old('prefix') }}" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group">
